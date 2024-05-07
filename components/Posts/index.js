@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 import Post from './Post';
 import Container from '../common/Container';
 import useWindowWidth from '../hooks/useWindowWidth';
+import { fetchUserById } from '../../server/users/users.service';
 
 const PostListContainer = styled.div(() => ({
   display: 'flex',
@@ -38,8 +39,18 @@ export default function Posts() {
   const [start, setStart] = useState(0);
   const { isSmallerDevice } = useWindowWidth();
   const limit = isSmallerDevice ? 5 : 10;
+  const [users, setUsers] = useState([]);
   const [postsAvailable, setPostsAvailable] = useState(true);
   
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const { data: users } = await axios.get('/api/v1/users');
+      setUsers(users);
+    }
+
+    fetchUsers();
+  }, [])
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -60,11 +71,16 @@ export default function Posts() {
     }, 3000);
   };
 
+  function fetchUserById(userId){
+    const [user] = users.filter(u => u?.id === userId);
+    return user;
+  }
+
   return (
     <Container>
       <PostListContainer>
         {posts.map(post => (
-          <Post post={post} />
+          <Post post={post} user={fetchUserById(post.userId)}/>
         ))}
       </PostListContainer>
 

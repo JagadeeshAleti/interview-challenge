@@ -67,7 +67,30 @@ const NextButton = styled(Button)`
   right: 10px;
 `;
 
-const Post = ({ post }) => {
+const User = styled.div(() => ({
+  display: 'flex',
+  alignItems: 'center',
+  margin: "10px"
+}));
+
+const Avatar = styled.div(({ theme }) => ({
+  width: '40px',
+  height: '40px',
+  borderRadius: '50%',
+  backgroundColor: 'grey',
+  color: '#fff',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontSize: '20px',
+  fontWeight: 'bold',
+}));
+
+const Details = styled.div(() => ({
+  marginLeft: '10px',
+}));
+
+const Post = ({ post, user }) => {
   const carouselRef = useRef(null);
 
   const handleNextClick = () => {
@@ -88,9 +111,23 @@ const Post = ({ post }) => {
     }
   };
 
+  function capitalizeFirstLetterOfEachWord(str) {
+    const words = str.split(' ');
+    const capitalizedWords = words.map(word => word.charAt(0).toUpperCase());
+    const capitalizedString = capitalizedWords.join('');    
+    return capitalizedString;
+  };
+
   return (
     <PostContainer>
       <CarouselContainer>
+        <User>
+          <Avatar>{capitalizeFirstLetterOfEachWord(user.name)}</Avatar>
+          <Details>
+            <div>{user.name}</div>
+            <div>{user.email}</div>
+          </Details>
+        </User>
         <Carousel ref={carouselRef}>
           {post.images.map((image, index) => (
             <CarouselItem key={index}>

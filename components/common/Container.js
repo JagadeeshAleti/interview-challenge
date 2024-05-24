@@ -1,5 +1,5 @@
 import React from 'react';
-import useWindowWidth from '../hooks/useWindowWidth';
+import { useWindowWidth } from '../Context/WindowWidthContext';
 
 export default function Container({ children }) {
   const { isSmallerDevice } = useWindowWidth();

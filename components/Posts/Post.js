@@ -8,6 +8,7 @@ const PostContainer = styled.div(() => ({
   border: '1px solid #ccc',
   borderRadius: '5px',
   overflow: 'hidden',
+  position: 'relative'
 }));
 
 const CarouselContainer = styled.div(() => ({
@@ -23,6 +24,7 @@ const Carousel = styled.div(() => ({
     display: 'none',
   },
   position: 'relative',
+  scrollSnapType: 'x mandatory'
 }));
 
 const CarouselItem = styled.div(() => ({
@@ -53,6 +55,8 @@ const Button = styled.button(() => ({
   fontSize: '20px',
   cursor: 'pointer',
   height: '50px',
+  top: '50%',
+  transform: 'translateY(-50%)',
 }));
 
 const PrevButton = styled(Button)`
@@ -63,13 +67,36 @@ const NextButton = styled(Button)`
   right: 10px;
 `;
 
-const Post = ({ post }) => {
+const User = styled.div(() => ({
+  display: 'flex',
+  alignItems: 'center',
+  margin: "10px"
+}));
+
+const Avatar = styled.div(({ theme }) => ({
+  width: '40px',
+  height: '40px',
+  borderRadius: '50%',
+  backgroundColor: 'grey',
+  color: '#fff',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontSize: '20px',
+  fontWeight: 'bold',
+}));
+
+const Details = styled.div(() => ({
+  marginLeft: '10px',
+}));
+
+const Post = ({ post, user }) => {
   const carouselRef = useRef(null);
 
   const handleNextClick = () => {
     if (carouselRef.current) {
       carouselRef.current.scrollBy({
-        left: 50,
+        left: 300,
         behavior: 'smooth',
       });
     }
@@ -78,15 +105,29 @@ const Post = ({ post }) => {
   const handlePrevClick = () => {
     if (carouselRef.current) {
       carouselRef.current.scrollBy({
-        left: -70,
+        left: -300,
         behavior: 'smooth',
       });
     }
   };
 
+  function capitalizeFirstLetterOfEachWord(str) {
+    const words = str.split(' ');
+    const capitalizedWords = words.map(word => word.charAt(0).toUpperCase());
+    const capitalizedString = capitalizedWords.join('');    
+    return capitalizedString;
+  };
+
   return (
     <PostContainer>
       <CarouselContainer>
+        <User>
+          <Avatar>{capitalizeFirstLetterOfEachWord(user.name)}</Avatar>
+          <Details>
+            <div>{user.name}</div>
+            <div>{user.email}</div>
+          </Details>
+        </User>
         <Carousel ref={carouselRef}>
           {post.images.map((image, index) => (
             <CarouselItem key={index}>
